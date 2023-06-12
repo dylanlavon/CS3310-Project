@@ -8,11 +8,13 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] float runSpeed = 10f;
     [SerializeField] float jumpSpeed = 10f;
+    [SerializeField] AudioClip jumpSFX;
     Vector2 moveInput;
-    Rigidbody2D myRigidbody;
-    Animator myAnimator;
+    public Rigidbody2D myRigidbody;
+    public Animator myAnimator;
     CapsuleCollider2D myBodyCollider;
     BoxCollider2D myFeetCollider;
+    public bool allowMovement = true;
 
     void Start()
     {
@@ -24,22 +26,23 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        Run();
+        if (allowMovement)
+            Run();
         FlipSprite();
     }
 
     void OnMove(InputValue value)
     {
-        moveInput = value.Get<Vector2>();
-        Debug.Log(moveInput);
+        if(allowMovement)
+            moveInput = value.Get<Vector2>();
     }
 
     void OnJump(InputValue value)
     {
-        if (value.isPressed && myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
+        if (value.isPressed && myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")) && allowMovement)
         {
+            AudioSource.PlayClipAtPoint(jumpSFX, Camera.main.transform.position);
             myRigidbody.velocity += new Vector2(0f, jumpSpeed);
-            Debug.Log("Jump!");
         }
     }
 
