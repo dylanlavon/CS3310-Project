@@ -10,6 +10,7 @@ public class WinScreen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log(GameSession.timeLeft);
         timeLeftText.text = GameSession.timeLeft.ToString("F2");
     }
 
